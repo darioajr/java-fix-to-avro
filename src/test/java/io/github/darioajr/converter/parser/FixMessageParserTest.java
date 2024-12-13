@@ -1,7 +1,6 @@
 package io.github.darioajr.converter.parser;
 
 import io.github.darioajr.converter.models.FixVersion;
-import io.github.darioajr.converter.parser.FixMessageParser;
 
 import org.junit.jupiter.api.Test;
 

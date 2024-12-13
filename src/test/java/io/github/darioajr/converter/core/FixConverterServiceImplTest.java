@@ -1,6 +1,5 @@
 package io.github.darioajr.converter.core;
 
-import io.github.darioajr.converter.core.FixConverterImpl;
 import io.github.darioajr.converter.models.FixVersion;
 import io.github.darioajr.converter.utils.AvroUtils;
 import org.apache.avro.generic.GenericRecord;

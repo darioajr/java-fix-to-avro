@@ -2,7 +2,6 @@ package io.github.darioajr.converter.utils;
 
 import io.github.darioajr.converter.models.FixVersion;
 import io.github.darioajr.converter.parser.AvroSchemaReader;
-import io.github.darioajr.converter.utils.AvroUtils;
 
 import org.apache.avro.generic.GenericRecord;
 import org.junit.jupiter.api.Test;

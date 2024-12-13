@@ -7,7 +7,6 @@ import java.util.Map;
 
 import org.junit.jupiter.api.Test;
 
-import io.github.darioajr.converter.utils.FixUtils;
 import quickfix.Message;
 
 public class FixUtilsTest {

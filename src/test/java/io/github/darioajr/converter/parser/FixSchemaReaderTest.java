@@ -4,8 +4,6 @@ import org.apache.avro.Schema;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
-import io.github.darioajr.converter.parser.AvroSchemaReader;
-
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
