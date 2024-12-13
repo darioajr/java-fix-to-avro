@@ -2,8 +2,6 @@ package io.github.darioajr.converter.models;
 
 import org.junit.jupiter.api.Test;
 
-import io.github.darioajr.converter.models.FixVersion;
-
 import java.nio.file.Paths;
 import static org.assertj.core.api.Assertions.*;
 
@@ -11,7 +9,7 @@ class FixVersionTest {
     @Test
     void testDefaultSchemaPath() {
         assertThat(FixVersion.FIX_4_4.getSchemaPath())
-                .isEqualTo("src\\test\\resources\\schemas\\FIX44_custom.xml");
+                .isEqualTo("src/test/resources/schemas/FIX44_custom.xml");
     }
 
     @Test
@@ -27,7 +25,7 @@ class FixVersionTest {
         // Verifica mudança
         assertThat(version.hasCustomSchema()).isTrue();
         assertThat(version.getSchemaPath())
-                .isEqualTo("src\\test\\resources\\schemas\\FIX44_custom.xml");
+                .isEqualTo("src/test/resources/schemas/FIX44_custom.xml");
     }
 
     @Test
