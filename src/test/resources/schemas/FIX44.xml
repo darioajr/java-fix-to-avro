@@ -4212,7 +4212,6 @@
       <value enum="BF" description="USER_RESPONSE"/>
       <value enum="BG" description="COLLATERAL_INQUIRY_ACK"/>
       <value enum="BH" description="CONFIRMATION_REQUEST"/>
-      <value enum="XX" description="CUSTOM"/>
     </field>
     <field number="36" name="NewSeqNo" type="SEQNUM"/>
     <field number="37" name="OrderID" type="STRING"/>
