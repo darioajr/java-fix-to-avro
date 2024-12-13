@@ -1,0 +1,15 @@
+{
+  "type": "record",
+  "name": "FixMessage",
+  "fields": [
+    { "name": "beginString", "type": "string" },
+    { "name": "bodyLength", "type": "string" },
+    { "name": "messageType", "type": "string" },
+    { "name": "senderCompID", "type": "string" },
+    { "name": "targetCompID", "type": "string" },
+    { "name": "msgSeqNum", "type": "string" },
+    { "name": "sendingTime", "type": "string" },
+    { "name": "fields", "type": { "type": "map", "values": "string" } },
+    { "name": "checkSum", "type": "string" }
+  ]
+}
