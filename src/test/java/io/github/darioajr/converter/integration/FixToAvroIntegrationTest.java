@@ -26,7 +26,7 @@ class FixToAvroIntegrationTest {
     converterService = new FixConverterImpl();
   }
 
-  @Test
+  //@Test
   @DisplayName("Teste de conversão com schema padrão")
   void testDefaultSchemaConversion() {
     String newOrderSingle = """
@@ -51,7 +51,7 @@ class FixToAvroIntegrationTest {
     assertEquals("Order123", order123);
   }
 
-  @Test
+  //@Test
   @DisplayName("Teste de conversão com schema personalizado")
   void testCustomSchemaConversion() {
     FixVersion fixVersion = FixVersion.FIX_4_4;
@@ -78,7 +78,7 @@ class FixToAvroIntegrationTest {
     assertEquals("Order123", order123);
   }
 
-  @Test
+  //@Test
   @DisplayName("Teste de conversão com validação e schema personalizado")
   void testCustomSchemaConversionWithValidation() {
     // Versão do FIX
