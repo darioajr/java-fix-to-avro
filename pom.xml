@@ -93,13 +93,6 @@
             <version>${avro.version}</version>
         </dependency>
 
-        <!-- NEXUS -->
-        <dependency>
-            <groupId>org.sonatype.plugins</groupId>
-            <artifactId>nexus-staging-maven-plugin</artifactId>
-            <version>1.7.0</version>
-        </dependency>
-
         <!-- TEST -->
         <dependency>
             <groupId>org.mockito</groupId>
