@@ -63,7 +63,7 @@
         <checkstyle.version>10.21.1</checkstyle.version>
         <jacoco.maven.plugin.version>0.8.12</jacoco.maven.plugin.version>
         <avro.version>1.12.0</avro.version>
-        <quickfixj.version>2.3.1</quickfixj.version>
+        <quickfixj.version>2.3.2</quickfixj.version>
         <license.maven.plugin.version>2.5.0</license.maven.plugin.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
