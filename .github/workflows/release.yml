@@ -41,7 +41,7 @@ jobs:
         EOF
 
     - name: Deploy to Maven Central
-      run: mvn clean deploy -P release
+      run: mvn clean deploy -P release --batch-mode
       env:
         MAVEN_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
         MAVEN_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
