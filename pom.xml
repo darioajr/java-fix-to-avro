@@ -18,6 +18,14 @@
             <name>Apache License 2.0</name>
             <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
         </license>
+        <license>
+            <name>Eclipse Public License 2.0</name>
+            <url>https://raw.githubusercontent.com/junit-team/junit5/refs/heads/main/LICENSE.md</url>
+        </license>
+        <license>
+            <name>The QuickFIX Software License, Version 1.0</name>
+            <url>https://raw.githubusercontent.com/quickfix-j/quickfixj/refs/heads/master/LICENSE</url>
+        </license>
     </licenses>
 
     <developers>
@@ -260,6 +268,14 @@
                     </execution>
                 </executions>
             </plugin>
+
+            <!-- LICENCES -->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>license-maven-plugin</artifactId>
+                <version>2.5.0</version>
+            </plugin>
+
         </plugins>
     </build>
 </project>
