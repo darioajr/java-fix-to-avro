@@ -1,9 +1,7 @@
 # java-fix-to-avro
 Fix to Avro converter developed with Java 21 that allows the use of customized fix schemas and generation of Avro and schema.
 
-[![codecov](https://codecov.io/github/darioajr/java-fix-to-avro/branch/main/graph/badge.svg?style=flat-square)](https://app.codecov.io/github/darioajr/java-fix-to-avro)
-
-[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fdarioajr%2Fjava-fix-to-avro.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Fdarioajr%2Fjava-fix-to-avro?ref=badge_shield)
+[![codecov](https://codecov.io/github/darioajr/java-fix-to-avro/branch/main/graph/badge.svg?style=flat-square)](https://app.codecov.io/github/darioajr/java-fix-to-avro) [![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fdarioajr%2Fjava-fix-to-avro.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Fdarioajr%2Fjava-fix-to-avro?ref=badge_shield) [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=darioajr_java-fix-to-avro&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=darioajr_java-fix-to-avro)
 
 
 ### Example

@@ -6,12 +6,12 @@
 
     <groupId>io.github.darioajr.converter</groupId>
     <artifactId>fixtoavro</artifactId>
-    <version>0.2.6</version>
+    <version>0.2.7</version>
     <packaging>jar</packaging>
 
     <name>Converter Fix to Avro</name>
     <description>Java library converter fix message to avro.</description>
-    <url>https://github.com/usuario/repositorio</url>
+    <url>https://github.com/darioajr/java-fix-to-avro</url>
 
     <licenses>
         <license>
