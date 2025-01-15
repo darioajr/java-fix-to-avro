@@ -4,11 +4,11 @@ import io.github.darioajr.converter.utils.AvroUtils;
 import org.apache.avro.generic.GenericRecord;
 
 /**
- * Implementation of FixConverterImpl.
+ * Implementation of FixConverter.
  */
 public class FixConverter implements Converter<String, GenericRecord> {
   /**
-   * Implementation of FixConverterImpl Constructor.
+   * Implementation of FixConverter Constructor.
    */
   public FixConverter() {}
 
