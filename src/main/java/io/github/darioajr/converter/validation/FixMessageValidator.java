@@ -1,6 +1,6 @@
 package io.github.darioajr.converter.validation;
 
-import io.github.darioajr.converter.models.FixVersion;
+import io.github.darioajr.converter.core.SchemaProvider;
 import java.util.List;
 import java.util.Map;
 
@@ -14,17 +14,17 @@ public class FixMessageValidator {
    * Valida os campos de uma mensagem FIX com base nos critérios fornecidos.
    *
    * @param parsedFields  Campos da mensagem FIX (chave: tag, valor: valor do campo).
-   * @param version       Versão FIX da mensagem.
+   * @param schema       Versão FIX da mensagem.
    * @param fieldCriteria Critérios de validação (chave: tag, valor: String ou List of String).
    */
   public void validateFields(Map<String, String> parsedFields,
-      FixVersion version, Map<String, Object> fieldCriteria) {
+      SchemaProvider schema, Map<String, Object> fieldCriteria) {
     if (parsedFields == null || parsedFields.isEmpty()) {
       throw new IllegalArgumentException("A mensagem FIX não pode ser vazia.");
     }
 
     // Validações de versão
-    validateVersion(parsedFields, version);
+    validateVersion(parsedFields, schema);
 
     // Validações de campos com base nos critérios
     for (Map.Entry<String, Object> criterion : fieldCriteria.entrySet()) {
@@ -63,9 +63,9 @@ public class FixMessageValidator {
    * Verifica se a mensagem FIX é compatível com a versão fornecida.
    *
    * @param parsedFields Campos da mensagem FIX.
-   * @param version      Versão FIX esperada.
+   * @param schema      Versão FIX esperada.
    */
-  public void validateVersion(Map<String, String> parsedFields, FixVersion version) {
+  public void validateVersion(Map<String, String> parsedFields, SchemaProvider schema) {
     // Tag BeginString indica a versão FIX
     String beginString = parsedFields.get("8");
 
@@ -73,30 +73,30 @@ public class FixMessageValidator {
       throw new IllegalArgumentException("A mensagem FIX não contém a tag BeginString (8).");
     }
 
-    switch (version) {
-      case FIX_4_4:
+    switch (schema.getVersion()) {
+      case "44":
         if (!"FIX.4.4".equals(beginString)) {
           throw new IllegalArgumentException("Mensagem FIX incompatível com a versão FIX.4.4.");
         }
         break;
-      case FIX_5_0:
+      case "50":
         if (!"FIX.5.0".equals(beginString)) {
           throw new IllegalArgumentException(
             "Mensagem FIX incompatível com a versão FIX.5.0.");
         }
         break;
-      case FIX_5_0_SP1:
+      case "50SP1":
         if (!"FIX.5.0SP1".equals(beginString)) {
           throw new IllegalArgumentException("Mensagem FIX incompatível com a versão FIX.5.0SP1.");
         }
         break;
-      case FIX_5_0_SP2:
+      case "50SP2":
         if (!"FIX.5.0SP2".equals(beginString)) {
           throw new IllegalArgumentException("Mensagem FIX incompatível com a versão FIX.5.0SP2.");
         }
         break;
       default:
-        throw new IllegalArgumentException("Versão FIX desconhecida: " + version);
+        throw new IllegalArgumentException("Versão FIX desconhecida: " + schema);
     }
   }
 }
