@@ -1,20 +1,19 @@
 package io.github.darioajr.converter.core;
 
-import io.github.darioajr.converter.models.FixVersion;
-import java.io.IOException;
+import io.github.darioajr.converter.utils.AvroUtils;
 import org.apache.avro.generic.GenericRecord;
 
 /**
  * Implementation of FixConverter.
  */
-public interface FixConverter {
+public class FixConverter implements Converter<String, GenericRecord> {
   /**
-   * Implementation of convertFixToAvro.
+   * Implementation of FixConverter Constructor.
    */
-  GenericRecord convertFixToAvro(String rawMessage, FixVersion version) throws IOException;
-  
-  /**
-   * Implementation of convertFixToAvroByteArray.
-   */
-  byte[] convertFixToAvroByteArray(String rawMessage, FixVersion version) throws IOException;
+  public FixConverter() {}
+
+  @Override
+  public GenericRecord convertToAvro(String rawMessage, SchemaProvider schema) {
+    return AvroUtils.convertFixToAvro(rawMessage, schema);
+  }
 }
