@@ -9,45 +9,39 @@ FIX to Avro converter built with Java 21, enabling the use of custom FIX schemas
 ## Example
  ```java
     // Use default schema
-    FixConverterImpl converterService = new FixConverterImpl();
-    String newOrderSingle = """
-      8=FIX.4.4|9=123|35=D|49=SenderCompID|56=TargetCompID|34=1|
-      52=20231208-12:34:56|11=Order123|54=1|38=100|55=AAPL|44=50.00|10=242|
-        """;
-    GenericRecord defaultRecord = converterService.convertFixToAvro(newOrderSingle,
-        FixVersion.FIX_4_4);
+    FixConverter fixConverter = new FixConverter();
+    String newOrderSingle = "8=FIX.4.4|9=123|35=D|49=SenderCompID|56=TargetCompID|"
+        + "34=1|52=20231208-12:34:56|11=Order123|54=1|38=100|55=AAPL|44=50.00|10=242|";
+    GenericRecord defaultRecord = fixConverter.convertToAvro(newOrderSingle,
+        FixDefaultVersion.FIX_4_4);
     System.out.println(defaultRecord);
 
+    Main main = new Main();
     // Use custom schema
-    FixVersion fixVersion = FixVersion.FIX_4_4;
-    fixVersion.setCustomSchemaPath(Paths.get("src/main/resources/schemas/FIX44_custom.xml"));
-    String newOrderSingleCustom = """
-      8=FIX.4.4|9=123|35=XX|49=SenderCompID|56=TargetCompID|34=1|
-      52=20231208-12:34:56|11=Order123|54=1|38=100|55=AAPL|44=50.00|10=94|
-        """;
-    GenericRecord customRecord = converterService.convertFixToAvro(newOrderSingleCustom,
-        fixVersion);
+    FixCustomVersion fixCustomVersion = new FixCustomVersion(
+        FixDefaultVersion.FIX_4_4.getVersion(),    
+        main.getSchemaPath("schemas/FIX44_custom.xml"));
+
+    String newOrderSingleCustom = "8=FIX.4.4|9=123|35=XX|49=SenderCompID|56=TargetCompID|34=1|52"
+        + "=20231208-12:34:56|11=Order123|54=1|38=100|55=AAPL|44=50.00|10=94|";
+    
+    GenericRecord customRecord = fixConverter.convertToAvro(newOrderSingleCustom,
+        fixCustomVersion);
     System.out.println(customRecord);
 
-    converterService.resetToDefaultSchema(FixVersion.FIX_4_4);
-
     FixMessageParser parser = new FixMessageParser();
-    String fixMessage = """
-      8=FIX.4.4|9=123|35=D|49=SenderCompID|56=TargetCompID|34=1|
-      52=20231208-12:34:56|11=Order123|54=1|38=100|55=AAPL|44=50.00|10=242|
-        """;
+    String fixMessage = "8=FIX.4.4|9=123|35=D|49=SenderCompID|56=TargetCompID|34=1|52"
+        .concat("=20231208-12:34:56|11=Order123|54=1|38=100|55=AAPL|44=50.00|10=242|");
 
-    // Validations criteria: tag=values (String or List<String>)
     Map<String, Object> fieldCriteria = new HashMap<>();
-    fieldCriteria.put("8", "FIX.4.4"); // Verifica versão
+    fieldCriteria.put("8", "FIX.4.4"); // verify version
     fieldCriteria.put("35", Arrays.asList("D", "G")); // MsgType must be "D" or "G"
     fieldCriteria.put("54", Arrays.asList("1", "2")); // Side must be "1" or "2"
-  
-    Map<String, String> parsedFields = parser.parse(fixMessage, FixVersion.FIX_4_4);
 
-    //Validation
+    Map<String, String> parsedFields = parser.parse(fixMessage, FixDefaultVersion.FIX_4_4);
+
     FixMessageValidator validator = new FixMessageValidator();
-    validator.validateFields(parsedFields, FixVersion.FIX_4_4, fieldCriteria);
+    validator.validateFields(parsedFields, FixDefaultVersion.FIX_4_4, fieldCriteria);
 
     System.out.println("Valid!");
   }
