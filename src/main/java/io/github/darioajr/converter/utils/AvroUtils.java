@@ -36,14 +36,13 @@ public class AvroUtils {
   /**
    * Implementation of convertFixToAvroByteArray.
    * 
-   */
-  /* 
-  public static byte[] convertFixToAvroByteArray(String rawMessage, FixVersion version)
+   */ 
+  public static byte[] convertFixToAvroByteArray(String rawMessage, SchemaProvider schema)
       throws IOException {
-    GenericRecord record = convertFixToAvro(rawMessage, version);
+    GenericRecord record = convertFixToAvro(rawMessage, schema);
     Schema avroSchema = AvroSchemaReader.readDefaultAvroSchema();
     return serializeGenericRecordToBytes(record, avroSchema);
-  }*/
+  }
 
   /**
    * Implementation of convertFixToAvro.
@@ -76,7 +75,10 @@ public class AvroUtils {
     }
   }
 
-  // Função para carregar o DataDictionary
+  /**
+   * Função para carregar o DataDictionary.
+   * 
+   */
   private static DataDictionary loadDataDictionary(String dictionaryPath)
       throws IOException, ConfigError {
     try (FileInputStream configFile = new FileInputStream(dictionaryPath)) {
@@ -84,7 +86,11 @@ public class AvroUtils {
     }
   }
 
-  // Função para serializar o GenericRecord em byte[]
+  /**
+   * Função para serializar o GenericRecord em byte[].
+   * 
+   */
+  @SuppressWarnings("unused")
   private static byte[] serializeGenericRecordToBytes(GenericRecord record, Schema schema)
       throws IOException {
     try (ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream()) {
