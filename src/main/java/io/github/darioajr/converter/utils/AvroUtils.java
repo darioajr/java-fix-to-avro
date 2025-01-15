@@ -1,6 +1,6 @@
 package io.github.darioajr.converter.utils;
 
-import io.github.darioajr.converter.models.FixVersion;
+import io.github.darioajr.converter.core.SchemaProvider;
 import io.github.darioajr.converter.parser.AvroSchemaReader;
 import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
@@ -37,21 +37,22 @@ public class AvroUtils {
    * Implementation of convertFixToAvroByteArray.
    * 
    */
+  /* 
   public static byte[] convertFixToAvroByteArray(String rawMessage, FixVersion version)
       throws IOException {
     GenericRecord record = convertFixToAvro(rawMessage, version);
     Schema avroSchema = AvroSchemaReader.readDefaultAvroSchema();
     return serializeGenericRecordToBytes(record, avroSchema);
-  }
+  }*/
 
   /**
    * Implementation of convertFixToAvro.
    * 
    */
-  public static GenericRecord convertFixToAvro(String rawMessage, FixVersion version) {
+  public static GenericRecord convertFixToAvro(String rawMessage, SchemaProvider schema) {
     try {
       Message message = new Message();
-      DataDictionary dataDictionary = loadDataDictionary(version.getSchemaPath());
+      DataDictionary dataDictionary = loadDataDictionary(schema.getSchemaPath());
       rawMessage = rawMessage.replace("|", "\u0001"); // Substitui "|" por SOH (\u0001)
       message.fromString(rawMessage, dataDictionary, true);
 

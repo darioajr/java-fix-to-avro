@@ -2,42 +2,24 @@ package io.github.darioajr.converter.models;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.nio.file.Paths;
 import org.junit.jupiter.api.Test;
 
 class FixVersionTest {
-  //@Test
+  @Test
   void testDefaultSchemaPath() {
-    assertThat(FixVersion.FIX_4_4.getSchemaPath())
-        .isEqualTo("src/test/resources/schemas/FIX44_custom.xml");
-  }
-
-  //@Test
-  void testCustomSchemaConfiguration() {
-    FixVersion version = FixVersion.FIX_4_4;
-
-    // Verifica estado inicial
-    assertThat(version.hasCustomSchema()).isFalse();
-
-    // Configura schema customizado
-    version.setCustomSchemaPath(Paths.get("src/test/resources/schemas/FIX44_custom.xml"));
-
-    // Verifica mudança
-    assertThat(version.hasCustomSchema()).isTrue();
+    FixDefaultVersion version = FixDefaultVersion.FIX_4_4;
     assertThat(version.getSchemaPath())
-        .isEqualTo("src/test/resources/schemas/FIX44_custom.xml");
+        .isEqualTo(getClass().getClassLoader().getResource("schemas/FIX44.xml").getPath());
   }
 
   @Test
-  void testResetToDefaultSchema() {
-    FixVersion version = FixVersion.FIX_4_4;
-    version.setCustomSchemaPath(Paths.get("src/test/resources/schemas/FIX44_custom.xml"));
+  void testCustomSchemaConfiguration() {
+    FixCustomVersion customVersion = new FixCustomVersion(FixDefaultVersion.FIX_4_4.getVersion(),
+        getClass().getClassLoader().getResource("schemas/FIX44_custom.xml").getPath());
 
-    // Reseta para schema padrão
-    version.setCustomSchemaPath(null);
-
-    assertThat(version.hasCustomSchema()).isFalse();
-    assertThat(version.getSchemaPath())
-        .isEqualTo("src/main/resources/schemas/FIX44.xml");
+    assertThat(customVersion.getVersion()).isEqualTo(FixDefaultVersion.FIX_4_4.getVersion());
+    assertThat(customVersion.getSchemaPath())
+        .isEqualTo(getClass().getClassLoader().getResource("schemas/FIX44_custom.xml").getPath());
   }
+
 }

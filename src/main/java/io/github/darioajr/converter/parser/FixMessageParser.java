@@ -1,6 +1,6 @@
 package io.github.darioajr.converter.parser;
 
-import io.github.darioajr.converter.models.FixVersion;
+import io.github.darioajr.converter.core.SchemaProvider;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -17,11 +17,11 @@ public class FixMessageParser {
    * Analisa uma mensagem FIX em um mapa de pares chave-valor.
    *
    * @param fixMessage A mensagem FIX em formato String.
-   * @param version    A versão FIX usada para validações específicas (opcional).
+   * @param schema    A versão FIX usada para validações específicas (opcional).
    * @return Um mapa contendo os campos da mensagem FIX (tag, valor).
    * @throws IllegalArgumentException Se a mensagem for nula ou inválida.
    */
-  public Map<String, String> parse(String fixMessage, FixVersion version) {
+  public Map<String, String> parse(String fixMessage, SchemaProvider schema) {
     validateMessage(fixMessage);
 
     // Substitui o delimitador de barra vertical pelo delimitador SOH
