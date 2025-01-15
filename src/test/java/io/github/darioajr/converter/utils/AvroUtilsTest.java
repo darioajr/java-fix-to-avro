@@ -18,12 +18,10 @@ import org.mockito.MockedStatic;
  */
 class AvroUtilsTest {
 
-  //@Test
+  @Test
   void convertFixToAvrowithValidMessageshouldReturnGenericRecord() {
-    String rawMessage = """
-      8=FIX.4.4|9=123|35=XX|49=SenderCompID|56=TargetCompID|34=1|
-      52=20231208-12:34:56|11=Order123|54=1|38=100|55=AAPL|44=50.00|10=94|
-        """;
+    String rawMessage = "8=FIX.4.4|9=123|35=XX|49=SenderCompID|56=TargetCompID|"
+        + "34=1|52=20231208-12:34:56|11=Order123|54=1|38=100|55=AAPL|44=50.00|10=94|";
 
     GenericRecord record = AvroUtils.convertFixToAvro(rawMessage, FixDefaultVersion.FIX_4_4);
 
@@ -44,15 +42,13 @@ class AvroUtilsTest {
     ).isInstanceOf(RuntimeException.class)
         .hasMessageContaining("Erro ao converter mensagem FIX para Avro");
   }
-/* 
-  //@Test
-  void convertFixToAvroByteArraywithValidMessageshouldReturnByteArray() throws IOException {
-    String rawMessage = """
-      8=FIX.4.4|9=123|35=D|49=SenderCompID|56=TargetCompID|34=1|
-      52=20231208-12:34:56|11=Order123|54=1|38=100|55=AAPL|44=50.00|10=242|
-        """;
 
-    byte[] avroBytes = AvroUtils.convertToAvroByteArray(rawMessage, FixDefaultVersion.FIX_4_4);
+  @Test
+  void convertFixToAvroByteArraywithValidMessageshouldReturnByteArray() throws IOException {
+    String rawMessage = "8=FIX.4.4|9=123|35=D|49=SenderCompID|56=TargetCompID|"
+        + "34=1|52=20231208-12:34:56|11=Order123|54=1|38=100|55=AAPL|44=50.00|10=242|";
+
+    byte[] avroBytes = AvroUtils.convertFixToAvroByteArray(rawMessage, FixDefaultVersion.FIX_4_4);
     
     assertThat(avroBytes).isNotNull();
     assertThat(avroBytes.length).isGreaterThan(0);
@@ -67,9 +63,9 @@ class AvroUtilsTest {
           .thenThrow(new IOException("Erro ao ler schema Avro"));
 
       assertThatThrownBy(() -> 
-        AvroUtils.convertFixToAvroByteArray(rawMessage, FixVersion.FIX_4_4)
+        AvroUtils.convertFixToAvroByteArray(rawMessage, FixDefaultVersion.FIX_4_4)
       ).isInstanceOf(RuntimeException.class)
       .hasMessageContaining("Erro ao converter mensagem FIX para Avro");
     }
-  }*/
+  }
 }
