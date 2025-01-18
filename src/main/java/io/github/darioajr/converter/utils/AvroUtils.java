@@ -106,7 +106,6 @@ public class AvroUtils {
    * Função para serializar o GenericRecord em byte[].
    * 
    */
-  @SuppressWarnings("unused")
   private static byte[] serializeGenericRecordToBytes(GenericRecord record, Schema schema)
       throws IOException {
     try (ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream()) {

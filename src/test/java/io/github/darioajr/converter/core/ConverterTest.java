@@ -34,11 +34,9 @@ import org.mockito.MockedStatic;
 class ConverterTest {
 
   private Converter<String, GenericRecord> converter;
-  private FixDefaultVersion fixDefaultVersion;
 
   @BeforeEach
   void setUp() {
-    fixDefaultVersion = mock(FixDefaultVersion.class); // Mock do FixVersion
     converter = new Converter<String, GenericRecord>() {
       @Override
       public GenericRecord convertToAvro(String rawMessage, SchemaProvider schema)
