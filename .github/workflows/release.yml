@@ -1,12 +1,15 @@
 name: Release to Maven Central
+
 on:
   push:
     tags:
-      - 'v*' # Somente quando uma tag de versão é criada
+      - 'v[0-9]+.[0-9]+.[0-9]+' # Push events to matching semver, i.e. 10.0.0
+
 jobs:
   release:
     runs-on: ubuntu-24.04
     steps:
+
     - name: Check out repository
       uses: actions/checkout@v4
       with:
@@ -40,8 +43,38 @@ jobs:
         </settings>
         EOF
 
+    - name: Get java-version
+      run: |
+        BUILD_VERSION=$( mvn help:evaluate -Dexpression=project.version -q -DforceStdout )
+        echo "VERSION=$BUILD_VERSION" >> $GITHUB_ENV
+
+    - name: Build
+      run: mvn -B package
+    
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ github.ref }}
+        release_name: Release ${{ github.ref }}
+        draft: false
+        prerelease: false
+
+    - name: Upload Release Asset
+      id: upload-release-asset
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./target/fixtoavro-${{env.VERSION}}.jar
+        asset_name: fixtoavro-${{env.VERSION}}.jar
+        asset_content_type: application/java-archive
+
     - name: Deploy to Maven Central
-      run: mvn clean deploy -P release --batch-mode
+      run: mvn -B deploy -P release
       env:
         MAVEN_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
         MAVEN_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
