@@ -27,7 +27,12 @@ import java.io.IOException;
  */
 public interface Converter<I, O> {
   /**
-   * Implementation of convert.
+   * Converts the input message to an Avro format.
+   *
+   * @param rawMessage the raw input message
+   * @param schema the schema provider for the Avro schema
+   * @return the converted message in Avro format
+   * @throws IOException if an I/O error occurs during conversion
    */
   O convertToAvro(I rawMessage, SchemaProvider schema) throws IOException;
 }
