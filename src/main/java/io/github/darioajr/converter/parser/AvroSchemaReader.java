@@ -29,6 +29,13 @@ public class AvroSchemaReader {
   private static final String AVRO_SCHEMA_PATH = "src/main/resources/schemas/FixMessage.avsc";
 
   /**
+   * Private constructor to prevent instantiation.
+   */
+  private AvroSchemaReader() {
+    // Prevent instantiation
+  }
+
+  /**
    * Reads an Avro schema from the specified file path.
    *
    * @param schemaPath the path to the Avro schema file
