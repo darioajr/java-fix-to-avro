@@ -41,15 +41,20 @@ jobs:
       - name: Run Checkstyle
         run: mvn -B checkstyle:check
 
+      - name: Import GPG key
+        run: |
+          mkdir -p ~/.gnupg
+          echo "${{ secrets.GPG_PRIVATE_KEY }}" | gpg --batch --import
+          KEY_ID=$(gpg --list-keys --with-colons | grep pub | cut -d':' -f5)
+          echo "default-key ${KEY_ID}" >> ~/.gnupg/gpg.conf
+          echo "use-agent" >> ~/.gnupg/gpg.conf
+
       - name: Run SonarQube analysis
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=darioajr_java-fix-to-avro
+        run: mvn -B clean verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=darioajr_java-fix-to-avro
       
-      - name: Compile and run tests
-        run: mvn -B clean verify
-
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v5
         with:
