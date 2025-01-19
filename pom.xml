@@ -43,8 +43,8 @@
 
     <scm>
         <url>https://github.com/darioajr/java-fix-to-avro</url>
-        <connection>scm:git:git://github.com/darioajr/java-fix-to-avro.git</connection>
-        <developerConnection>scm:git:ssh://github.com/darioajr/java-fix-to-avro.git</developerConnection>
+        <connection>scm:git:https://github.com/darioajr/java-fix-to-avro.git</connection>
+        <developerConnection>scm:git:https://github.com/darioajr/java-fix-to-avro.git</developerConnection>
         <tag>main</tag>
     </scm>
 

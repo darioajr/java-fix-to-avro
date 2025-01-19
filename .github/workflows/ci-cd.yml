@@ -107,11 +107,6 @@ jobs:
           </settings>
           EOF
  
-      - name: Set up SSH key
-        uses: webfactory/ssh-agent@v0.9.0
-        with:
-          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
-          
       - name: Generate release version
         run: |
           git config --global user.email "github-actions@github.com"
