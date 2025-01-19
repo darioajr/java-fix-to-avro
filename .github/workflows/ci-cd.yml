@@ -54,7 +54,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: ./mvnw -B clean verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=darioajr_java-fix-to-avro
+        run: ./mvnw -B clean verify sonar:sonar -Dsonar.projectKey=darioajr_java-fix-to-avro -Dsonar.login=${{ secrets.SONAR_TOKEN }}
       
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v5
@@ -116,6 +116,8 @@ jobs:
           ./mvnw release:prepare -B
           TAG_NAME=$(git describe --tags --abbrev=0)
           echo "TAG_NAME=$TAG_NAME" >> $GITHUB_ENV
+          VERSION=${TAG_NAME//v/}
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
           
           ./mvnw release:perform -B
           git push origin --tags
@@ -142,8 +144,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./target/fixtoavro-${{env.TAG_NAME}}.jar
-          asset_name: fixtoavro-${{env.TAG_NAME}}.jar
+          asset_path: ./target/fixtoavro-${{ env.VERSION }}.jar
+          asset_name: fixtoavro-${{ env.VERSION }}.jar
           asset_content_type: application/java-archive
 
   verify-commits:
