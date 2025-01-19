@@ -106,7 +106,16 @@ jobs:
             </servers>
           </settings>
           EOF
-
+ 
+      - name: Set up SSH key for GitHub
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan github.com >> ~/.ssh/known_hosts
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          
       - name: Generate release version
         run: |
           git config --global user.email "github-actions@github.com"
