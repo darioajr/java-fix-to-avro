@@ -111,7 +111,7 @@ jobs:
         run: |
           git config --global user.email "github-actions@github.com"
           git config --global user.name "GitHub Actions"
-          mvn release:prepare -B -DpushChanges=false
+          mvn release:prepare -B
           mvn release:perform -B
           git push origin --tags
         env:
