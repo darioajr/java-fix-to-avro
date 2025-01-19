@@ -22,15 +22,19 @@ import java.nio.file.Paths;
 import org.apache.avro.Schema;
 
 /**
- * Implementation of AvroSchemaReader.
+ * Utility class for reading Avro schemas.
  * 
  */
 public class AvroSchemaReader {
   private static final String AVRO_SCHEMA_PATH = "src/main/resources/schemas/FixMessage.avsc";
 
   /**
-   * Implementation of readAvroSchema.
-   * 
+   * Reads an Avro schema from the specified file path.
+   *
+   * @param schemaPath the path to the Avro schema file
+   * @return the parsed Avro schema
+   * @throws IOException if an I/O error occurs reading from the file
+   * @throws org.apache.avro.SchemaParseException if the schema is invalid
    */
   public static Schema readAvroSchema(String schemaPath)
       throws IOException, org.apache.avro.SchemaParseException {
@@ -38,8 +42,11 @@ public class AvroSchemaReader {
   }
   
   /**
-   * Implementation of readDefaultAvroSchema.
-   * 
+   * Reads the default Avro schema from a predefined file path.
+   *
+   * @return the parsed Avro schema
+   * @throws IOException if an I/O error occurs reading from the file
+   * @throws org.apache.avro.SchemaParseException if the schema is invalid
    */
   public static Schema readDefaultAvroSchema()
       throws IOException, org.apache.avro.SchemaParseException {

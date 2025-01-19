@@ -44,14 +44,18 @@ import quickfix.field.SendingTime;
 import quickfix.field.TargetCompID;
 
 /**
- * Implementation of AvroUtils.
+ * Utility class for Avro-related operations.
  * 
  */
 public class AvroUtils {
 
   /**
-   * Implementation of convertFixToAvroByteArray.
-   * 
+   * Converts a FIX message to an Avro byte array.
+   *
+   * @param rawMessage the raw FIX message as a string
+   * @param schema the schema provider for the Avro schema
+   * @return the serialized Avro byte array
+   * @throws IOException if an I/O error occurs during conversion or serialization
    */ 
   public static byte[] convertFixToAvroByteArray(String rawMessage, SchemaProvider schema)
       throws IOException {
@@ -61,8 +65,12 @@ public class AvroUtils {
   }
 
   /**
-   * Implementation of convertFixToAvro.
-   * 
+   * Converts a FIX message to an Avro GenericRecord.
+   *
+   * @param rawMessage the raw FIX message as a string
+   * @param schema the schema provider for the Avro schema
+   * @return the converted Avro GenericRecord
+   * @throws RuntimeException if an error occurs during conversion
    */
   public static GenericRecord convertFixToAvro(String rawMessage, SchemaProvider schema) {
     try {
@@ -92,8 +100,12 @@ public class AvroUtils {
   }
 
   /**
-   * Função para carregar o DataDictionary.
-   * 
+   * Loads the DataDictionary from the specified file path.
+   *
+   * @param dictionaryPath the path to the DataDictionary file
+   * @return the loaded DataDictionary
+   * @throws IOException if an I/O error occurs reading from the file
+   * @throws ConfigError if there is an error in the configuration
    */
   private static DataDictionary loadDataDictionary(String dictionaryPath)
       throws IOException, ConfigError {
@@ -103,8 +115,12 @@ public class AvroUtils {
   }
 
   /**
-   * Função para serializar o GenericRecord em byte[].
-   * 
+   * Serializes a GenericRecord to a byte array.
+   *
+   * @param record the GenericRecord to serialize
+   * @param schema the Avro schema for the record
+   * @return the serialized byte array
+   * @throws IOException if an I/O error occurs during serialization
    */
   private static byte[] serializeGenericRecordToBytes(GenericRecord record, Schema schema)
       throws IOException {
