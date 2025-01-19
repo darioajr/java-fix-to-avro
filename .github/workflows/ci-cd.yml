@@ -16,7 +16,10 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0  
+          fetch-depth: 0
+
+      - name: Configure Maven Wrapper Permissions
+        run: chmod +x mvnw
 
       - name: Set up JDK 21
         uses: actions/setup-java@v4
@@ -39,7 +42,7 @@ jobs:
           restore-keys: sonar-${{ runner.os }}-
 
       - name: Run Checkstyle
-        run: mvn -B checkstyle:check
+        run: ./mvnw -B checkstyle:check
 
       - name: Import GPG key
         run: |
@@ -54,7 +57,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: mvn -B clean verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=darioajr_java-fix-to-avro
+        run: ./mvnw -B clean verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=darioajr_java-fix-to-avro
       
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v5
@@ -69,10 +72,14 @@ jobs:
     permissions:
       contents: write
     steps:
+      
       - name: Check out repository
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0  
+          fetch-depth: 0
+
+      - name: Configure Maven Wrapper Permissions
+        run: chmod +x mvnw
 
       - name: Set up JDK 21
         uses: actions/setup-java@v4
@@ -109,20 +116,19 @@ jobs:
  
       - name: Generate release version
         run: |
-          git config --global user.email "github-actions@github.com"
-          git config --global user.name "GitHub Actions"
-          mvn release:prepare -B
-          mvn release:perform -B
+          git config --global user.email "darioajr@gmail.com"
+          git config --global user.name "Dario Alves Junior"
+          
+          ./mvnw release:prepare -B
+          TAG_NAME=$(git describe --tags --abbrev=0)
+          echo "TAG_NAME=$TAG_NAME" >> $GITHUB_ENV
+          
+          ./mvnw release:perform -B
           git push origin --tags
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           MAVEN_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
           MAVEN_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
-
-      - name: Get Java Version
-        run: |
-          BUILD_VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
-          echo "VERSION=$BUILD_VERSION" >> $GITHUB_ENV
 
       - name: Create GitHub Release
         id: create_release
@@ -130,8 +136,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ github.ref_name }}
-          release_name: Release ${{ github.ref_name }}
+          tag_name: ${{ env.TAG_NAME }}
+          release_name: Release ${{ env.TAG_NAME }}
           draft: false
           prerelease: false
 
@@ -142,8 +148,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./target/fixtoavro-${{env.VERSION}}.jar
-          asset_name: fixtoavro-${{env.VERSION}}.jar
+          asset_path: ./target/fixtoavro-${{env.TAG_NAME}}.jar
+          asset_name: fixtoavro-${{env.TAG_NAME}}.jar
           asset_content_type: application/java-archive
 
   verify-commits:
