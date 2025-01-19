@@ -44,6 +44,7 @@ jobs:
       - name: Import GPG key
         run: |
           mkdir -p ~/.gnupg
+          chmod 700 ~/.gnupg 
           echo "${{ secrets.GPG_PRIVATE_KEY }}" | gpg --batch --import
           KEY_ID=$(gpg --list-keys --with-colons | grep pub | cut -d':' -f5)
           echo "default-key ${KEY_ID}" >> ~/.gnupg/gpg.conf
