@@ -130,7 +130,7 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           name: Release ${{ env.TAG_NAME }}
-          tag_name: ${{ env.VERSION }}
+          tag_name: ${{ env.TAG_NAME }}
           files: |
             target/*.jar
             target/*.pom
