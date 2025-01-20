@@ -118,7 +118,7 @@ jobs:
           echo "TAG_NAME=$TAG_NAME" >> $GITHUB_ENV
           VERSION=${TAG_NAME//v/}
           echo "VERSION=$VERSION" >> $GITHUB_ENV
-          
+      
           ./mvnw release:perform -B
           git push origin --tags
         env:
@@ -126,27 +126,23 @@ jobs:
           MAVEN_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
           MAVEN_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
 
-      - name: Create GitHub Release
-        id: create_release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Release
+        uses: softprops/action-gh-release@v2
         with:
-          tag_name: ${{ env.TAG_NAME }}
-          release_name: Release ${{ env.TAG_NAME }}
+          name: Release ${{ env.TAG_NAME }}
+          tag_name: ${{ env.VERSION }}
+          files: |
+            target/*.jar
+            target/*.pom
+            target/*.asc
+            target/*.sha1
+            target/*.sha256
+            target/*.sha512
           draft: false
           prerelease: false
-
-      - name: Upload Release Asset
-        id: upload-release-asset
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./target/fixtoavro-${{ env.VERSION }}.jar
-          asset_name: fixtoavro-${{ env.VERSION }}.jar
-          asset_content_type: application/java-archive
+          generate_release_notes: true
+          make_latest: true
+          token: ${{ secrets.GITHUB_TOKEN }}
 
   verify-commits:
     name: Verify Commits
