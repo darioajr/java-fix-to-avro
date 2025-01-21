@@ -118,34 +118,7 @@ jobs:
           echo "TAG_NAME=$TAG_NAME" >> $GITHUB_ENV
           VERSION=${TAG_NAME//v/}
           echo "VERSION=$VERSION" >> $GITHUB_ENV
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          MAVEN_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
-          MAVEN_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
-
-      - name: Generate CHANGELOG.md
-        uses: TriPSs/conventional-changelog-action@v6
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          output-file: "CHANGELOG.md"
-          skip-version-file: false
-          skip-commit: false
-          skip-tag: true
-          release-count: 10
-          preset: "angular"
-          version: ${{ env.VERSION }}
-
-      - name: Commit and Push CHANGELOG.md
-        run: |
-          git config --global user.name 'Dario Alves Junior'
-          git config --global user.email 'darioajr@gmail.com'
-          
-          git add CHANGELOG.md
-          git commit -m "docs(changelog): update CHANGELOG.md"
-          git push
       
-      - name: Generate release (perform the release and push tag)
-        run: |
           ./mvnw release:perform -B
           git push origin --tags
         env:
@@ -169,6 +142,7 @@ jobs:
           prerelease: false
           generate_release_notes: true
           make_latest: true
+          fail_on_unmatched_files: false
           token: ${{ secrets.GITHUB_TOKEN }}
 
   verify-commits:
