@@ -47,14 +47,14 @@ class FixMessageParserTest {
   void shouldThrowExceptionForNullMessage() {
     assertThatThrownBy(() -> parser.parse(null, FixDefaultVersion.FIX_4_4))
         .isInstanceOf(IllegalArgumentException.class)
-        .hasMessage("A mensagem FIX não pode ser nula ou vazia.");
+        .hasMessage("The FIX message cannot be null or empty.");
   }
 
   @Test
   void shouldThrowExceptionForEmptyMessage() {
     assertThatThrownBy(() -> parser.parse("", FixDefaultVersion.FIX_4_4))
         .isInstanceOf(IllegalArgumentException.class)
-        .hasMessage("A mensagem FIX não pode ser nula ou vazia.");
+        .hasMessage("The FIX message cannot be null or empty.");
   }
 
   @Test
