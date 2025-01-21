@@ -30,6 +30,13 @@ import quickfix.Message;
 public class FixUtilsTest {
 
   @Test
+  public void testConstructor() throws Exception {
+    
+    FixUtils fixUtils = new FixUtils();
+    assertNotNull(fixUtils);
+  }
+
+  @Test
   public void testGetFieldsAsMap() throws Exception {
     Message message = new Message();
     

@@ -94,7 +94,8 @@ public class FixMessageValidator {
     String beginString = parsedFields.get("8");
 
     if (beginString == null) {
-      throw new IllegalArgumentException("The FIX message does not contain the BeginString tag (8).");
+      throw new IllegalArgumentException(
+        "The FIX message does not contain the BeginString tag (8).");
     }
 
     switch (schema.getVersion()) {

@@ -18,6 +18,7 @@ package io.github.darioajr.converter.utils;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.mockStatic;
 
 import io.github.darioajr.converter.models.FixDefaultVersion;
@@ -33,6 +34,13 @@ import org.mockito.MockedStatic;
  * 
  */
 class AvroUtilsTest {
+  
+  @Test
+  public void testConstructor() throws Exception {
+    
+    AvroUtils avroUtils = new AvroUtils();
+    assertNotNull(avroUtils);
+  }
 
   @Test
   void convertFixToAvrowithValidMessageshouldReturnGenericRecord() {

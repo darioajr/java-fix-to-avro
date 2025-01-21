@@ -17,16 +17,143 @@
 package io.github.darioajr.converter.validator;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+import io.github.darioajr.converter.core.SchemaProvider;
 import io.github.darioajr.converter.models.FixDefaultVersion;
 import io.github.darioajr.converter.parser.FixMessageParser;
 import io.github.darioajr.converter.validation.FixMessageValidator;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import org.junit.jupiter.api.Test;
 
 class FixMessageValidatorTest {
+
+  private final FixMessageValidator validator = new FixMessageValidator();
+
+  @Test
+  void validateFields_withEmptyParsedFields_shouldThrowException() {
+    Map<String, String> parsedFields = Collections.emptyMap();
+    SchemaProvider schema = FixDefaultVersion.FIX_4_4;
+    Map<String, Object> fieldCriteria = new HashMap<>();
+
+    assertThatThrownBy(() -> validator.validateFields(parsedFields, schema, fieldCriteria))
+      .isInstanceOf(IllegalArgumentException.class)
+        .hasMessageContaining("The FIX message cannot be empty.");
+  }
+
+  @Test
+  void validateFields_withMissingRequiredField_shouldThrowException() {
+    Map<String, String> parsedFields = new HashMap<>();
+    parsedFields.put("8", "FIX.4.4");
+    SchemaProvider schema = FixDefaultVersion.FIX_4_4;
+    Map<String, Object> fieldCriteria = new HashMap<>();
+    fieldCriteria.put("9", "123");
+
+    assertThatThrownBy(() -> validator.validateFields(parsedFields, schema, fieldCriteria))
+      .isInstanceOf(IllegalArgumentException.class)
+        .hasMessageContaining("The required field is missing: tag 9");
+  }
+
+  @Test
+  void validateFields_withInvalidFieldValue_shouldThrowNewException() {
+    Map<String, String> parsedFields = new HashMap<>();
+    parsedFields.put("8", "FIX.4.4");
+    parsedFields.put("9", "456");
+    SchemaProvider schema = FixDefaultVersion.FIX_4_4;
+    Map<String, Object> fieldCriteria = new HashMap<>();
+    fieldCriteria.put("9", "123");
+
+    assertThatThrownBy(() -> validator.validateFields(parsedFields, schema, fieldCriteria))
+      .isInstanceOf(IllegalArgumentException.class)
+        .hasMessageContaining("The field 9 has an invalid value: expected=123, actual=456");
+  }
+
+  @Test
+  void validateVersion_withMissingBeginString_shouldThrowException() {
+    Map<String, String> parsedFields = new HashMap<>();
+    SchemaProvider schema = FixDefaultVersion.FIX_4_4;
+
+    assertThatThrownBy(() -> validator.validateVersion(parsedFields, schema))
+      .isInstanceOf(IllegalArgumentException.class)
+        .hasMessageContaining("The FIX message does not contain the BeginString tag (8).");
+  }
+
+  @Test
+  void validateVersion_withIncompatibleVersion_shouldThrowException() {
+    Map<String, String> parsedFields = new HashMap<>();
+    parsedFields.put("8", "FIX.4.3");
+    SchemaProvider schema = FixDefaultVersion.FIX_4_4;
+
+    assertThatThrownBy(() -> validator.validateVersion(parsedFields, schema))
+      .isInstanceOf(IllegalArgumentException.class)
+        .hasMessageContaining("FIX message incompatible with version FIX.4.4.");
+  }
+
+  @Test
+  void validateVersion_withIncompatible50_version_shouldThrowException() {
+    FixMessageValidator fixMessageValidator = new FixMessageValidator();
+    Map<String, String> parsedFields = new HashMap<>();
+    parsedFields.put("8", "FIX.4.4");
+    SchemaProvider schema = FixDefaultVersion.FIX_5_0;
+
+    assertThatThrownBy(() -> fixMessageValidator.validateVersion(parsedFields, schema))
+      .isInstanceOf(IllegalArgumentException.class)
+        .hasMessageContaining("FIX message incompatible with version FIX.5.0.");
+  }
+
+  @Test
+  void validateVersion_withIncompatible50sp1_version_shouldThrowException() {
+    Map<String, String> parsedFields = new HashMap<>();
+    parsedFields.put("8", "FIX.5.0");
+    SchemaProvider schema = FixDefaultVersion.FIX_5_0_SP1;
+
+    assertThatThrownBy(() -> validator.validateVersion(parsedFields, schema))
+      .isInstanceOf(IllegalArgumentException.class)
+        .hasMessageContaining("FIX message incompatible with version FIX.5.0SP1.");
+  }
+
+  @Test
+  void validateVersion_withIncompatible50sp2_version_shouldThrowException() {
+    Map<String, String> parsedFields = new HashMap<>();
+    parsedFields.put("8", "FIX.5.0SP1");
+    SchemaProvider schema = FixDefaultVersion.FIX_5_0_SP2;
+
+    assertThatThrownBy(() -> validator.validateVersion(parsedFields, schema))
+      .isInstanceOf(IllegalArgumentException.class)
+        .hasMessageContaining("FIX message incompatible with version FIX.5.0SP2.");
+  }
+
+  @Test
+  void validateVersion_withUnknownVersion_shouldThrowNewException() {
+    Map<String, String> parsedFields = new HashMap<>();
+    parsedFields.put("8", "FIX.4.4");
+    SchemaProvider schema = new SchemaProvider() {
+    
+      @Override
+      public String getVersion() {
+        return "unknown";
+      }
+
+      @Override
+      public String getSchemaPath() {
+        return "unknown";
+      }
+    };
+
+    assertThatThrownBy(() -> validator.validateVersion(parsedFields, schema))
+      .isInstanceOf(IllegalArgumentException.class)
+        .hasMessageContaining("Unknown FIX version: " + schema);
+  }
+
+  @Test
+  public void testConstructor() throws Exception {
+    
+    FixMessageValidator fixMessageValidator = new FixMessageValidator();
+    assertNotNull(fixMessageValidator);
+  }
 
   @Test
   void validateFields_withValidFields_shouldPass() {
@@ -75,6 +202,7 @@ class FixMessageValidatorTest {
       .hasMessageContaining("The required field is missing: tag 9");
   }
 
+  /* 
   @Test
   void validateFields_withInvalidFieldValue_shouldThrowException() {
     String newOrderSingleCustom = """
@@ -98,7 +226,7 @@ class FixMessageValidatorTest {
       validator.validateFields(parsedFields, FixDefaultVersion.FIX_4_4, fieldCriteria)
     ).isInstanceOf(IllegalArgumentException.class)
       .hasMessageContaining("FIX message incompatible with version FIX.4.4.");
-  }
+  }*/
 
   @Test
   void validateFields_withExtraField_shouldPass() {
@@ -120,5 +248,59 @@ class FixMessageValidatorTest {
         FixDefaultVersion.FIX_4_4);
 
     validator.validateFields(parsedFields, FixDefaultVersion.FIX_4_4, fieldCriteria);
+  }
+
+  @Test
+  void validateVersion_withIncompatibleVersion50_shouldThrowException() {
+    Map<String, String> parsedFields = new HashMap<>();
+    parsedFields.put("8", "FIX.4.4");
+    SchemaProvider schema = FixDefaultVersion.FIX_5_0;
+
+    assertThatThrownBy(() -> validator.validateVersion(parsedFields, schema))
+      .isInstanceOf(IllegalArgumentException.class)
+        .hasMessageContaining("FIX message incompatible with version FIX.5.0.");
+  }
+
+  @Test
+  void validateVersion_withIncompatibleVersion50Sp1_shouldThrowException() {
+    Map<String, String> parsedFields = new HashMap<>();
+    parsedFields.put("8", "FIX.4.4");
+    SchemaProvider schema = FixDefaultVersion.FIX_5_0_SP1;
+
+    assertThatThrownBy(() -> validator.validateVersion(parsedFields, schema))
+      .isInstanceOf(IllegalArgumentException.class)
+        .hasMessageContaining("FIX message incompatible with version FIX.5.0SP1.");
+  }
+
+  @Test
+  void validateVersion_withIncompatibleVersion50Sp2_shouldThrowException() {
+    Map<String, String> parsedFields = new HashMap<>();
+    parsedFields.put("8", "FIX.4.4");
+    SchemaProvider schema = FixDefaultVersion.FIX_5_0_SP2;
+
+    assertThatThrownBy(() -> validator.validateVersion(parsedFields, schema))
+      .isInstanceOf(IllegalArgumentException.class)
+        .hasMessageContaining("FIX message incompatible with version FIX.5.0SP2.");
+  }
+
+  @Test
+  void validateVersion_withUnknownVersion_shouldThrowException() {
+    Map<String, String> parsedFields = new HashMap<>();
+    parsedFields.put("8", "FIX.4.4");
+    SchemaProvider schema = new SchemaProvider() {
+        @Override
+        public String getVersion() {
+            return "unknown";
+        }
+
+        @Override
+        public String getSchemaPath() {
+            return "unknown";
+        }
+    };
+
+    assertThatThrownBy(() -> validator.validateVersion(parsedFields, schema))
+      .isInstanceOf(IllegalArgumentException.class)
+        .hasMessageContaining("Unknown FIX version: " + schema);
   }
 }
