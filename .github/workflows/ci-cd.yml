@@ -4,6 +4,10 @@ on:
   push:
     branches:
       - main
+      - develop
+      - feature/*
+      - bugfix/*
+      - hotfix/*
   pull_request:
     types: [opened, synchronize, reopened]
 
@@ -66,6 +70,7 @@ jobs:
     name: Release and Publish
     needs: build
     runs-on: ubuntu-24.04
+    if: github.ref == 'refs/heads/main' && !startsWith(github.head_ref, 'dependabot/')
     permissions:
       contents: write
     steps:
