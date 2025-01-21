@@ -84,7 +84,7 @@ public class AvroUtils {
     try {
       Message message = new Message();
       DataDictionary dataDictionary = loadDataDictionary(schema.getSchemaPath());
-      rawMessage = rawMessage.replace("|", "\u0001"); // Substitui "|" por SOH (\u0001)
+      rawMessage = rawMessage.replace("|", "\u0001");
       message.fromString(rawMessage, dataDictionary, true);
 
       Schema avroSchema = AvroSchemaReader.readDefaultAvroSchema();
@@ -103,7 +103,7 @@ public class AvroUtils {
       record.put("fields", fields);
       return record;
     } catch (IOException | InvalidMessage | FieldNotFound | ConfigError e) {
-      throw new RuntimeException("Erro ao converter mensagem FIX para Avro", e);
+      throw new RuntimeException("Error converting FIX message to Avro", e);
     }
   }
 
