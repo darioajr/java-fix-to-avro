@@ -66,6 +66,6 @@ class FixMessageParserTest {
     assertThat(parsedFields)
         .isNotEmpty()
         .containsEntry("8", "FIX.4.4")
-        .doesNotContainKey(""); // Campo vazio deve ser ignorado
+        .doesNotContainKey("");
   }
 }

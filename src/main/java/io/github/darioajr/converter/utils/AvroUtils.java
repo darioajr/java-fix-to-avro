@@ -50,6 +50,14 @@ import quickfix.field.TargetCompID;
 public class AvroUtils {
 
   /**
+   * Default constructor.
+   * This constructor is intentionally empty. Nothing special is needed here.
+   */
+  public AvroUtils() {
+    // Default constructor
+  }
+  
+  /**
    * Converts a FIX message to an Avro byte array.
    *
    * @param rawMessage the raw FIX message as a string

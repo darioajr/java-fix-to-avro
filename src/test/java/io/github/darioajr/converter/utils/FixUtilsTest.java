@@ -31,18 +31,15 @@ public class FixUtilsTest {
 
   @Test
   public void testGetFieldsAsMap() throws Exception {
-    // Criação da mensagem de teste
     Message message = new Message();
     
-    message.setString(8, "FIX.4.4"); // BeginString
-    message.setString(35, "D"); // MsgType
-    message.setString(55, "AAPL"); // Symbol
+    message.setString(8, "FIX.4.4");
+    message.setString(35, "D");
+    message.setString(55, "AAPL");
 
-    // Chamada do método a ser testado
     Map<String, String> fieldsMap = FixUtils.getFieldsAsMap(message);
     System.out.println(fieldsMap);
 
-    // Verificações
     assertNotNull(fieldsMap);
     assertEquals("FIX.4.4", fieldsMap.get("8"));
     assertEquals("D", fieldsMap.get("35"));

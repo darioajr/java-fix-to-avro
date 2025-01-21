@@ -23,14 +23,23 @@ import quickfix.Field;
 import quickfix.Message;
 
 /**
- * Implementation of FixUtils.
- * 
+ * Utility class for FIX message operations.
  */
 public class FixUtils {
 
   /**
-   * Implementation of getFieldsAsMap.
-   * 
+   * Default constructor.
+   * This constructor is intentionally empty. Nothing special is needed here.
+   */
+  public FixUtils() {
+    // Default constructor
+  }
+
+  /**
+   * Converts the fields of a FIX message into a map of key-value pairs.
+   *
+   * @param message The FIX message.
+   * @return A map containing the fields of the FIX message (tag, value).
    */
   public static Map<String, String> getFieldsAsMap(Message message) {
     Map<String, String> fieldMap = new HashMap<>();

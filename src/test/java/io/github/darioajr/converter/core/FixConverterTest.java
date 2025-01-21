@@ -90,19 +90,16 @@ class FixConverterTest {
   void testConvertFixToAvroByteArray() throws IOException {
     try (MockedStatic<AvroUtils> mockedStatic = mockStatic(AvroUtils.class)) {
       String rawMessage = "8=FIX.4.4|9=123|35=XX|49=SenderCompID|56=TargetCompID|"
-        + "34=1|52=20231208-12:34:56|11=Order123|54=1|38=100|55=AAPL|44=50.00|10=94|";
+          + "34=1|52=20231208-12:34:56|11=Order123|54=1|38=100|55=AAPL|44=50.00|10=94|";
 
-      FixDefaultVersion version = mock(FixDefaultVersion.class);  // Mock do FixVersion
+      FixDefaultVersion version = mock(FixDefaultVersion.class);
       
       byte[] mockByteArray = new byte[]{1, 2, 3, 4};
 
-      // Mock da função AvroUtils.convertFixToAvroByteArray
       when(AvroUtils.convertFixToAvroByteArray(rawMessage, version)).thenReturn(mockByteArray);
 
-      // Chama o método
       byte[] result = fixConverter.convertToByteArray(rawMessage, version);
 
-      // Verifica se o método foi chamado e se o retorno é o mock esperado
       verify(AvroUtils.class, times(1));
 
       AvroUtils.convertFixToAvroByteArray(rawMessage, version);

@@ -19,25 +19,38 @@ package io.github.darioajr.converter.models;
 import io.github.darioajr.converter.core.SchemaProvider;
 
 /**
- * FixCustomVersion.
+ * Represents a custom FIX version with its associated schema path.
  */
 public class FixCustomVersion implements SchemaProvider {
   private final String version;
   private final String schemaPath;
   
   /**
-   * FixVersionConfig constructor.
+   * Constructs a new FixCustomVersion with the specified version and schema path.
+   *
+   * @param version the version of the FIX protocol
+   * @param schemaPath the path to the schema file
    */
   public FixCustomVersion(String version, String schemaPath) {
     this.version = version;
     this.schemaPath = schemaPath;
   }
 
+  /**
+   * Gets the version of the FIX protocol.
+   *
+   * @return the version of the FIX protocol
+   */
   @Override
   public String getVersion() {
     return version;
   }
 
+  /**
+   * Gets the path to the schema file.
+   *
+   * @return the path to the schema file
+   */
   @Override
   public String getSchemaPath() {
     return schemaPath;

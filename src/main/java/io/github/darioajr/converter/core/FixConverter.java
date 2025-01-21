@@ -35,9 +35,12 @@ public class FixConverter implements Converter<String, GenericRecord> {
   }
 
   /**
-   * Implementation of convertToByteArray.
+   * Converts a FIX message to an Avro byte array.
    *
-   * @throws IOException if an I/O error occurs during conversion
+   * @param rawMessage the raw FIX message as a string
+   * @param schema the schema provider for the Avro schema
+   * @return the serialized Avro byte array
+   * @throws IOException if an I/O error occurs during conversion or serialization
    */
   public byte[] convertToByteArray(String rawMessage, SchemaProvider schema) throws IOException {
     return AvroUtils.convertFixToAvroByteArray(rawMessage, schema);

@@ -21,12 +21,16 @@ package io.github.darioajr.converter.core;
  */
 public interface SchemaProvider {
   /**
-   * version.
+   * Gets the version of the schema.
+   *
+   * @return the version of the schema
    */
   String getVersion();
   
   /**
-   * schemaPath.
+   * Gets the path to the schema file.
+   *
+   * @return the path to the schema file
    */
   String getSchemaPath();
 }

@@ -30,7 +30,6 @@ class FixSchemaReaderTest {
 
   @Test
   void testReadAvroSchema(@TempDir Path tempDir) throws IOException {
-    // Cria um arquivo de schema temporário
     Path schemaPath = tempDir.resolve("tempfile-avro-fix.avsc");
     Files.writeString(schemaPath, """
         {
@@ -50,10 +49,8 @@ class FixSchemaReaderTest {
         }
         """);
 
-    // Lê o schema
     Schema schema = AvroSchemaReader.readAvroSchema(schemaPath.toString());
 
-    // Verificações
     assertThat(schema).isNotNull();
     assertThat(schema.getType()).isEqualTo(Schema.Type.RECORD);
     assertThat(schema.getFields())
@@ -65,7 +62,6 @@ class FixSchemaReaderTest {
 
   @Test
   void testSchemaTypeMapping(@TempDir Path tempDir) throws IOException {
-    // Cria um arquivo de schema temporário com diversos tipos
     Path schemaPath = tempDir.resolve("tempfile-avro-fix.avsc");
 
     Files.writeString(schemaPath, """
@@ -86,45 +82,31 @@ class FixSchemaReaderTest {
         }
         """);
 
-    // Lê o schema
     Schema schema = AvroSchemaReader.readAvroSchema(schemaPath.toString());
 
-    // Verificações de mapeamento de tipos
     assertThat(schema.getFields())
         .satisfiesExactly(
-            // beginString é STRING
             field -> assertThat(field.schema().getType()).isEqualTo(Schema.Type.STRING),
-            // bodyLength é STRING
             field -> assertThat(field.schema().getType()).isEqualTo(Schema.Type.STRING),
-            // msgType é STRING
             field -> assertThat(field.schema().getType()).isEqualTo(Schema.Type.STRING),
-            // senderCompID é STRING
             field -> assertThat(field.schema().getType()).isEqualTo(Schema.Type.STRING),
-            // targetCompID é STRING
             field -> assertThat(field.schema().getType()).isEqualTo(Schema.Type.STRING),
-            // msgSeqNum é STRING
             field -> assertThat(field.schema().getType()).isEqualTo(Schema.Type.STRING),
-            // sendingTime é STRING
             field -> assertThat(field.schema().getType()).isEqualTo(Schema.Type.STRING),
             field -> {
-                // Verificação para o campo "fields" que é um mapa
                 assertThat(field.schema().getType()).isEqualTo(Schema.Type.MAP);
-                // Acessa diretamente o valueType
                 assertThat(field.schema().getValueType().getType())
-                  .isEqualTo(Schema.Type.STRING); // O tipo do valor no MAP é STRING
+                  .isEqualTo(Schema.Type.STRING);
             },
-            // checkSum é STRING
             field -> assertThat(field.schema().getType()).isEqualTo(Schema.Type.STRING)
         );
   }
 
   @Test
   void testInvalidSchemaFile(@TempDir Path tempDir) throws IOException {
-    // Cria um arquivo de schema inválido
     Path schemaPath = tempDir.resolve("invalid_schema.txt");
     Files.writeString(schemaPath, "InvalidSchema");
 
-    // Verifica tratamento de schema inválido
     assertThatThrownBy(() -> AvroSchemaReader.readAvroSchema(schemaPath.toString()))
         .isInstanceOf(org.apache.avro.SchemaParseException.class);
   }

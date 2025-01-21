@@ -56,7 +56,7 @@ class AvroUtilsTest {
     assertThatThrownBy(() -> 
         AvroUtils.convertFixToAvro(invalidMessage, FixDefaultVersion.FIX_4_4)
     ).isInstanceOf(RuntimeException.class)
-        .hasMessageContaining("Erro ao converter mensagem FIX para Avro");
+        .hasMessageContaining("Error converting FIX message to Avro");
   }
 
   @Test
@@ -76,12 +76,12 @@ class AvroUtilsTest {
 
     try (MockedStatic<AvroSchemaReader> schemaReaderMock = mockStatic(AvroSchemaReader.class)) {
       schemaReaderMock.when(() -> AvroSchemaReader.readDefaultAvroSchema())
-          .thenThrow(new IOException("Erro ao ler schema Avro"));
+          .thenThrow(new IOException("Error reading Avro schema"));
 
       assertThatThrownBy(() -> 
         AvroUtils.convertFixToAvroByteArray(rawMessage, FixDefaultVersion.FIX_4_4)
       ).isInstanceOf(RuntimeException.class)
-      .hasMessageContaining("Erro ao converter mensagem FIX para Avro");
+      .hasMessageContaining("Error converting FIX message to Avro");
     }
   }
 }

@@ -26,26 +26,34 @@ import java.util.Map;
  */
 public class FixMessageParser {
 
-  private static final char SOH_DELIMITER = '\u0001'; // Caracter delimitador SOH
+  private static final char SOH_DELIMITER = '\u0001'; // SOH delimiter character
   private static final String KEY_VALUE_SEPARATOR = "=";
 
   /**
-   * Analisa uma mensagem FIX em um mapa de pares chave-valor.
+   * Default constructor.
+   * This constructor is intentionally empty. Nothing special is needed here.
+   */
+  public FixMessageParser() {
+    // Default constructor
+  }
+  
+  /**
+   * Parses a FIX message into a map of key-value pairs.
    *
-   * @param fixMessage A mensagem FIX em formato String.
-   * @param schema    A versão FIX usada para validações específicas (opcional).
-   * @return Um mapa contendo os campos da mensagem FIX (tag, valor).
-   * @throws IllegalArgumentException Se a mensagem for nula ou inválida.
+   * @param fixMessage The FIX message as a string.
+   * @param schema    The FIX version used for specific validations (optional).
+   * @return A map containing the fields of the FIX message (tag, value).
+   * @throws IllegalArgumentException If the message is null or invalid.
    */
   public Map<String, String> parse(String fixMessage, SchemaProvider schema) {
     validateMessage(fixMessage);
 
-    // Substitui o delimitador de barra vertical pelo delimitador SOH
+    // Replace the vertical bar delimiter with the SOH delimiter
     fixMessage = fixMessage.replace('|', SOH_DELIMITER);
 
-    // Mapa para armazenar os pares de chave-valor da mensagem
+    // Map to store the key-value pairs of the message
     Map<String, String> parsedFields = new HashMap<>();
-    // Divide a mensagem nos campos
+    // Split the message into fields
     String[] fields = fixMessage.split(String.valueOf(SOH_DELIMITER)); 
 
     for (String field : fields) {
@@ -56,35 +64,35 @@ public class FixMessageParser {
   }
 
   /**
-   * Valida se a mensagem FIX é válida.
+   * Validates if the FIX message is valid.
    *
-   * @param fixMessage A mensagem FIX para validar.
-   * @throws IllegalArgumentException Se a mensagem for nula ou vazia.
+   * @param fixMessage The FIX message to validate.
+   * @throws IllegalArgumentException If the message is null or empty.
    */
   private void validateMessage(String fixMessage) {
     if (fixMessage == null || fixMessage.trim().isEmpty()) {
-      throw new IllegalArgumentException("A mensagem FIX não pode ser nula ou vazia.");
+      throw new IllegalArgumentException("The FIX message cannot be null or empty.");
     }
   }
 
   /**
-   * Analisa um campo FIX e adiciona ao mapa de campos.
+   * Parses a FIX field and adds it to the map of fields.
    *
-   * @param field        O campo FIX em formato chave-valor (ex: "35=D").
-   * @param parsedFields O mapa para armazenar os campos analisados.
+   * @param field        The FIX field in key-value format (e.g., "35=D").
+   * @param parsedFields The map to store the parsed fields.
    */
   private void parseField(String field, Map<String, String> parsedFields) {
     if (field == null || field.isEmpty()) {
-      return; // Ignorar campos vazios
+      return; // Ignore empty fields
     }
 
-    String[] keyValue = field.split(KEY_VALUE_SEPARATOR, 2); // Divide no primeiro "=" encontrado
+    String[] keyValue = field.split(KEY_VALUE_SEPARATOR, 2); // Split at the first "=" found
 
     if (keyValue.length == 2) {
       String tag = keyValue[0].trim();
       String value = keyValue[1].trim();
 
-      // Apenas adiciona ao mapa se ambos os valores forem válidos
+      // Only add to the map if both values are valid
       if (!tag.isEmpty() && !value.isEmpty()) {
         parsedFields.put(tag, value);
       }
