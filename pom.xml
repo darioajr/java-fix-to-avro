@@ -4,7 +4,7 @@
 
     <groupId>io.github.darioajr.converter</groupId>
     <artifactId>fixtoavro</artifactId>
-    <version>0.4.13-SNAPSHOT</version>
+    <version>0.4.13</version>
     <packaging>jar</packaging>
 
     <name>Converter Fix to Avro</name>
@@ -43,7 +43,7 @@
         <url>https://github.com/darioajr/java-fix-to-avro</url>
         <connection>scm:git:https://github.com/darioajr/java-fix-to-avro.git</connection>
         <developerConnection>scm:git:https://github.com/darioajr/java-fix-to-avro.git</developerConnection>
-        <tag>main</tag>
+        <tag>v0.4.13</tag>
     </scm>
 
     <properties>
