@@ -45,6 +45,16 @@ class FixMessageValidatorTest {
   }
 
   @Test
+  void validateFields_withNullParsedFields_shouldThrowException() {
+    SchemaProvider schema = FixDefaultVersion.FIX_4_4;
+    Map<String, Object> fieldCriteria = new HashMap<>();
+
+    assertThatThrownBy(() -> validator.validateFields(null, schema, fieldCriteria))
+      .isInstanceOf(IllegalArgumentException.class)
+        .hasMessageContaining("The FIX message cannot be empty.");
+  }
+
+  @Test
   void validateFields_withMissingRequiredField_shouldThrowException() {
     Map<String, String> parsedFields = new HashMap<>();
     parsedFields.put("8", "FIX.4.4");
