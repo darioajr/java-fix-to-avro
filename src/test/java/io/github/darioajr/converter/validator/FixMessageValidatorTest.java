@@ -80,6 +80,7 @@ class FixMessageValidatorTest {
       .isInstanceOf(IllegalArgumentException.class)
         .hasMessageContaining("The field 9 has an invalid value: expected=123, actual=456");
   }
+  
 
   @Test
   void validateVersion_withMissingBeginString_shouldThrowException() {
@@ -112,6 +113,28 @@ class FixMessageValidatorTest {
     assertThatThrownBy(() -> fixMessageValidator.validateVersion(parsedFields, schema))
       .isInstanceOf(IllegalArgumentException.class)
         .hasMessageContaining("FIX message incompatible with version FIX.5.0.");
+  }
+  
+  @Test
+  void validateFields_withValidFields_shouldPass() {
+    String newOrderSingleCustom = """
+      8=FIX.4.4|9=123|35=XX|49=SenderCompID|56=TargetCompID|34=1|
+      52=20231208-12:34:56|11=Order123|54=1|38=100|55=AAPL|44=50.00|10=94|
+        """;
+
+    FixMessageParser fixMessageParser = new FixMessageParser();
+
+    Map<String, Object> fieldCriteria = new HashMap<>();
+    fieldCriteria.put("8", "FIX.4.4");
+    fieldCriteria.put("35", Arrays.asList("D", "XX"));  // Lista de valores permitidos
+    fieldCriteria.put("54", Arrays.asList("1", "2"));
+
+    Map<String, String> parsedFields = fixMessageParser.parse(newOrderSingleCustom, 
+        FixDefaultVersion.FIX_4_4);
+
+    FixMessageValidator validator = new FixMessageValidator();
+
+    validator.validateFields(parsedFields, FixDefaultVersion.FIX_4_4, fieldCriteria);
   }
 
   @Test
@@ -166,25 +189,28 @@ class FixMessageValidatorTest {
   }
 
   @Test
-  void validateFields_withValidFields_shouldPass() {
+  void validateFields_withInvalidListFieldValue_shouldThrowException() {
     String newOrderSingleCustom = """
-      8=FIX.4.4|9=123|35=XX|49=SenderCompID|56=TargetCompID|34=1|
-      52=20231208-12:34:56|11=Order123|54=1|38=100|55=AAPL|44=50.00|10=94|
+      8=FIX.4.4|9=123|35=Z|49=SenderCompID|56=TargetCompID|34=1|
+      52=20231208-12:34:56|11=Order123|54=3|38=100|55=AAPL|44=50.00|10=94|
         """;
 
-    FixMessageParser fixMessageParser = new FixMessageParser();
+    FixMessageParser parser = new FixMessageParser();
 
     Map<String, Object> fieldCriteria = new HashMap<>();
     fieldCriteria.put("8", "FIX.4.4");
-    fieldCriteria.put("35", Arrays.asList("D", "XX"));
-    fieldCriteria.put("54", Arrays.asList("1", "2"));
-
-    Map<String, String> parsedFields = fixMessageParser.parse(newOrderSingleCustom, 
-        FixDefaultVersion.FIX_4_4);
+    fieldCriteria.put("35", Arrays.asList("D", "XX"));  // Apenas esses são permitidos
+    fieldCriteria.put("54", Arrays.asList("1", "2"));   // Apenas esses são permitidos
 
     FixMessageValidator validator = new FixMessageValidator();
 
-    validator.validateFields(parsedFields, FixDefaultVersion.FIX_4_4, fieldCriteria);
+    Map<String, String> parsedFields = parser.parse(newOrderSingleCustom,
+        FixDefaultVersion.FIX_4_4);
+
+    assertThatThrownBy(() -> 
+      validator.validateFields(parsedFields, FixDefaultVersion.FIX_4_4, fieldCriteria)
+    ).isInstanceOf(IllegalArgumentException.class)
+      .hasMessageContaining("The field 35 has an invalid value: expected one of=[D, XX], actual=Z");
   }
 
   @Test
@@ -212,7 +238,29 @@ class FixMessageValidatorTest {
       .hasMessageContaining("The required field is missing: tag 9");
   }
 
-  /* 
+  @Test
+  void validateFields_withInvalidCriterion_shouldThrowException() {
+    String newOrderSingleCustom = """
+      8=FIX.4.4|9=123|35=XX|49=SenderCompID|56=TargetCompID|34=1|
+      52=20231208-12:34:56|11=Order123|54=1|38=100|55=AAPL|44=50.00|10=94|
+        """;
+
+    FixMessageParser parser = new FixMessageParser();
+
+    Map<String, Object> fieldCriteria = new HashMap<>();
+    fieldCriteria.put("35", 12345); // Valor inválido (esperado String ou Lista)
+
+    FixMessageValidator validator = new FixMessageValidator();
+
+    Map<String, String> parsedFields = parser.parse(newOrderSingleCustom,
+        FixDefaultVersion.FIX_4_4);
+
+    assertThatThrownBy(() -> 
+        validator.validateFields(parsedFields, FixDefaultVersion.FIX_4_4, fieldCriteria)
+    ).isInstanceOf(IllegalArgumentException.class)
+      .hasMessageContaining("Invalid validation criterion for tag 35");
+  }
+  
   @Test
   void validateFields_withInvalidFieldValue_shouldThrowException() {
     String newOrderSingleCustom = """
@@ -236,7 +284,7 @@ class FixMessageValidatorTest {
       validator.validateFields(parsedFields, FixDefaultVersion.FIX_4_4, fieldCriteria)
     ).isInstanceOf(IllegalArgumentException.class)
       .hasMessageContaining("FIX message incompatible with version FIX.4.4.");
-  }*/
+  }
 
   @Test
   void validateFields_withExtraField_shouldPass() {
