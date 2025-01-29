@@ -221,9 +221,8 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>${maven.surefire.plugin.version}</version>
                 <configuration>
-                    <argLine>
-                        -javaagent:"${settings.localRepository}/net/bytebuddy/byte-buddy-agent/1.16.1/byte-buddy-agent-1.16.1.jar"
-                    </argLine>
+                    <reuseForks>false</reuseForks>
+                    <argLine>-javaagent:${settings.localRepository}/net/bytebuddy/byte-buddy-agent/1.16.1/byte-buddy-agent-1.16.1.jar ${argLine}</argLine>
                 </configuration>
             </plugin>
             
